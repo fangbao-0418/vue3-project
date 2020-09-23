@@ -1,30 +1,54 @@
 <template>
 <div class="login">
   <div>
-    login page
+    <a-form :model="form" :label-col="labelCol" :wrapper-col="wrapperCol">
+      <a-form-item>
+        <template v-slot:prefix>
+          <UserOutlined style="color:rgba(0,0,0,.25)" />
+        </template>
+        <a-input v-model:value="form.name" />
+      </a-form-item>
+      <a-form-item>
+        <a-input v-model:value="form.name" />
+      </a-form-item>
+    </a-form>
   </div>
-  <a-button type="primary" @click="login">
-    login
-  </a-button>
 </div>
 </template>
 
 <script lang="ts">
-// import {
-//   Vue
-// } from 'vue-class-component'
-
 import {
   defineComponent
 } from 'vue'
 
-// export default class Login extends Vue {
-//   login() {
-//     console.log(this.$router, '$router')
-//   }
-// }
-
 export default defineComponent({
+  data() {
+    return {
+      labelCol: {
+        span: 4
+      },
+      wrapperCol: {
+        span: 14
+      },
+      form: {
+        name: '',
+        region: undefined,
+        date1: undefined,
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: '',
+      },
+    }
+  },
+  mounted() {
+    const input = document.querySelector('input') as HTMLInputElement
+    setTimeout(() => {
+      // input.focus()
+      input.setAttribute('autofocus', 'autofocus')
+    }, 1000)
+
+  },
   methods: {
     login() {
       console.log(this.$router)
@@ -40,5 +64,6 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   height: 100%;
+  background: url('~@/assets/login.jpg') 0 0 / 100% 100%;
 }
 </style>

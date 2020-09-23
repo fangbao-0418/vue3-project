@@ -5,9 +5,18 @@ import {
   Layout,
   Menu,
   Button,
+  Input,
+  Form
 } from 'ant-design-vue'
+import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
  
 export default function (app: App) {
+  console.log(UserOutlined.name, 'UserOutlined name')
+  app.component(UserOutlined.name, UserOutlined)
+  app.component(LockOutlined.name, LockOutlined)
+  app.component(Form.name, Form)
+  app.component(Form.Item.name, Form.Item)
+  app.component(Input.name, Input)
   app.component(ConfigProvider.name, ConfigProvider)
   app.component(Layout.name, Layout)
   app.component(Layout.Sider.name, Layout.Sider)
