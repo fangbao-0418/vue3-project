@@ -10,14 +10,24 @@
 </template>
 
 <script lang="ts">
+// import {
+//   Vue
+// } from 'vue-class-component'
+
 import {
   defineComponent
 } from 'vue'
+
+// export default class Login extends Vue {
+//   login() {
+//     console.log(this.$router, '$router')
+//   }
+// }
+
 export default defineComponent({
   methods: {
     login() {
-      this.$router.push('/decimal')
-      console.log(this.$router, 'login')
+      console.log(this.$router)
     }
   }
 })

@@ -1,9 +1,10 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, Router } from 'vue-router'
 import DecimalPage from '../pages/decimal/index.vue'
 import Dashboard from '../containers/dashboard/index.vue'
 import Login from '../pages/login'
 
-console.log(DecimalPage, 'DecimalPage')
+// console.log(DecimalPage, 'DecimalPage')
+
 
 const routes = [
   {

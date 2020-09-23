@@ -22,3 +22,6 @@ yarn lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Document
+[Vue Router](https://next.router.vuejs.org/guide/advanced/navigation-guards.html#per-route-guard)
