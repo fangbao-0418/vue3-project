@@ -1,10 +1,11 @@
 import { createRouter, createWebHashHistory, Router } from 'vue-router'
+import APP from '@/utils/app'
 import DecimalPage from '../pages/decimal/index.vue'
 import Dashboard from '../containers/dashboard/index.vue'
 import Login from '../pages/login'
+import Logout from '../pages/logout'
 
-// console.log(DecimalPage, 'DecimalPage')
-
+import PublishList from '@/pages/publish/list'
 
 const routes = [
   {
@@ -15,12 +16,21 @@ const routes = [
       {
         path: '/decimal',
         component: DecimalPage
+      },
+      {
+        name: 'publishList',
+        path: '/publish/list',
+        component: PublishList
       }
     ]
   },
   {
     path: '/login',
     component: Login
+  },
+  {
+    path: '/logout',
+    component: Logout
   }
   // {
   //   path: '/about',
@@ -36,5 +46,7 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes
 })
+
+APP.use(router)
 
 export default router

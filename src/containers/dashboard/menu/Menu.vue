@@ -1,16 +1,8 @@
 <template>
-<a-menu theme="dark" mode="inline" :selectedKeys="selectedKeys">
-  <a-menu-item v-for="(item, index) in menuOptions" :key="index">
-    <user-outlined />
-    <span class="nav-text" @click="goPage">{{ item.name }}</span>
-  </a-menu-item>
-</a-menu>
+<tree-menu :options="options" />
 </template>
 
 <script lang="ts">
-import {
-  UserOutlined
-} from '@ant-design/icons-vue';
 import {
   Options,
   Vue
@@ -18,10 +10,11 @@ import {
 import {
   menuOptions
 } from './config'
+import TreeMenu from './TreeMenu'
 
 @Options({
   components: {
-    UserOutlined
+    TreeMenu
   }
 })
 export default class extends Vue {
@@ -29,12 +22,7 @@ export default class extends Vue {
 
   }
   selectedKeys = []
-  menuOptions = menuOptions
-  // data() {
-  //   return {
-  //     menuOptions: menuOptions
-  //   }
-  // }
+  options = menuOptions
   goPage() {
     console.log('go page')
   }

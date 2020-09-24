@@ -6,14 +6,22 @@ import {
   Menu,
   Button,
   Input,
-  Form
+  Form,
+  DatePicker,
+  Table,
+  Modal
 } from 'ant-design-vue'
-import { UserOutlined, LockOutlined } from '@ant-design/icons-vue';
+import { UserOutlined, LockOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
  
 export default function (app: App) {
-  console.log(UserOutlined.name, 'UserOutlined name')
+  app.component(MenuUnfoldOutlined.name, MenuUnfoldOutlined)
+  app.component(MenuFoldOutlined.name, MenuFoldOutlined)
   app.component(UserOutlined.name, UserOutlined)
   app.component(LockOutlined.name, LockOutlined)
+  app.component(Modal.name, Modal)
+  app.component(Table.name, Table)
+  app.component(DatePicker.name, DatePicker)
+  app.component(DatePicker.RangePicker.name, DatePicker.RangePicker)
   app.component(Form.name, Form)
   app.component(Form.Item.name, Form.Item)
   app.component(Input.name, Input)

@@ -1,15 +1,25 @@
 <template>
 <div class="login">
-  <div>
-    <a-form :model="form" :label-col="labelCol" :wrapper-col="wrapperCol">
+  <div class="box">
+    <div class="logo" />
+    <h2>欢迎来到 XT_OPS！</h2>
+    <a-form class="form" :model="form" :label-col="labelCol" :wrapper-col="wrapperCol">
       <a-form-item>
-        <template v-slot:prefix>
-          <UserOutlined style="color:rgba(0,0,0,.25)" />
-        </template>
-        <a-input v-model:value="form.name" />
+        <a-input v-model:value="form.username" type="password" placeholder="用户名">
+          <template v-slot:prefix>
+            <UserOutlined style="color:rgba(0,0,0,.25)" />
+          </template>
+        </a-input>
       </a-form-item>
       <a-form-item>
-        <a-input v-model:value="form.name" />
+        <a-input @keydown.enter="onSubmit" v-model:value="form.password" type="password" placeholder="密码">
+          <template v-slot:prefix>
+            <LockOutlined style="color:rgba(0,0,0,.25)" />
+          </template>
+        </a-input>
+      </a-form-item>
+      <a-form-item>
+        <a-button class="login_btn" @click="onSubmit" type="primary">登录</a-button>
       </a-form-item>
     </a-form>
   </div>
@@ -20,44 +30,33 @@
 import {
   defineComponent
 } from 'vue'
-
+import * as api from './api'
 export default defineComponent({
   data() {
     return {
       labelCol: {
-        span: 4
+        span: 0
       },
       wrapperCol: {
-        span: 14
+        span: 24
       },
       form: {
-        name: '',
-        region: undefined,
-        date1: undefined,
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: '',
+        username: '',
+        password: ''
       },
     }
   },
-  mounted() {
-    const input = document.querySelector('input') as HTMLInputElement
-    setTimeout(() => {
-      // input.focus()
-      input.setAttribute('autofocus', 'autofocus')
-    }, 1000)
-
-  },
   methods: {
-    login() {
-      console.log(this.$router)
+    onSubmit() {
+      api.login(this.form).then(() => {
+        this.$router.push('/')
+      })
     }
   }
 })
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 .login {
   display: flex;
   flex-direction: column;
@@ -65,5 +64,34 @@ export default defineComponent({
   align-items: center;
   height: 100%;
   background: url('~@/assets/login.jpg') 0 0 / 100% 100%;
+
+  .box {
+    width: 400px;
+    text-align: center;
+
+    .logo {
+      height: 130px;
+      background: url('~@/assets/jenkins.svg') center center / 100px auto no-repeat;
+      margin-bottom: 20px;
+    }
+
+    .form {
+      width: 300px;
+      margin: 0 auto;
+
+      :global(.ant-form-item) {
+        margin-bottom: 15px;
+      }
+
+      :global(.ant-input) {
+        height: 36px !important;
+      }
+    }
+
+    .login_btn {
+      width: 100%;
+      height: 36px;
+    }
+  }
 }
 </style>

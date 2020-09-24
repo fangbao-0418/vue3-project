@@ -4,7 +4,10 @@ import router from './router'
 import antd from './plugins/ant-design-vue'
 import './style/main.styl'
 
+console.log(router, 'router main')
+
 const app = createApp(App)
 app.use(router)
 app.use(antd)
+
 app.mount('#app')
