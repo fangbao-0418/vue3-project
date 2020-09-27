@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory, Router } from 'vue-router'
+import { createRouter, createWebHashHistory, RouteRecordRaw, Router } from 'vue-router'
 import APP from '@/utils/app'
 import DecimalPage from '../pages/decimal/index.vue'
 import Dashboard from '../containers/dashboard/index.vue'
@@ -6,8 +6,9 @@ import Login from '../pages/login'
 import Logout from '../pages/logout'
 
 import PublishList from '@/pages/publish/list'
+import PublishDetail from '@/pages/publish/detail'
 
-const routes = [
+const routes: RouteRecordRaw[] = [
   {
     path: '/',
     // name: 'main',
@@ -19,8 +20,13 @@ const routes = [
       },
       {
         name: 'publishList',
-        path: '/publish/list',
+        path: '/publish',
         component: PublishList
+      },
+      {
+        name: 'publishDetail',
+        path: '/publish/detail/:id',
+        component: PublishDetail
       }
     ]
   },

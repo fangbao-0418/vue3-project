@@ -1,19 +1,23 @@
 <template>
-<div>
-  <a-form layout="inline" :model="formInline" @submit="handleSubmit" @submit.prevent>
+<page :breadcrumb="[{name: '上线单管理', path: '/publish/list'}]">
+  <a-tabs type="card" v-model:activeKey="form.envid" @change="onTabChange">
+    <a-tab-pane v-for="(item) in tabsCfgs" :key="item.id" :tab="item.name">
+    </a-tab-pane>
+  </a-tabs>
+  <a-form layout="inline" :model="form" @submit="handleSubmit" @submit.prevent>
     <a-form-item label="应用名称">
-      <a-input v-model:value="form.user" placeholder="Username">
+      <a-input v-model:value="form.user" placeholder="应用名称">
         <template v-slot:prefix>
           <UserOutlined style="color:rgba(0,0,0,.25)" />
         </template>
       </a-input>
     </a-form-item>
     <a-form-item label="申请时间">
-      <a-range-picker v-model:value="form.date1" show-time type="date" placeholder="Pick a date" style="width: 100%;" />
+      <a-range-picker v-model:value="form.date1" show-time type="date" style="width: 100%;" />
     </a-form-item>
     <a-form-item>
-      <a-button type="primary" html-type="submit">
-        Log in
+      <a-button type="primary" html-type="submit" @click="search">
+        查询
       </a-button>
     </a-form-item>
   </a-form>
@@ -23,31 +27,25 @@
     </a-button>
   </div>
   <a-table :columns="columns" :data-source="data">
-    <template v-slot:name="{ text }">
-      <a>{{ text }}</a>
-    </template>
-    <template v-slot:customTitle>
-      <span>
-        <smile-outlined /> Name
-      </span>
-    </template>
-    <template v-slot:tags="{ text: tags }">
-      <span>
-        <a-tag v-for="tag in tags" :key="tag" :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'">
-          {{ tag.toUpperCase() }}
-        </a-tag>
+    <template v-slot:action="{ text }">
+      <span class="href" @click="goDetail(text)">
+        详情
       </span>
     </template>
   </a-table>
-  <a-modal v-model:visible="visible" title="Basic Modal" @ok="handleOk">
-
-  </a-modal>
-</div>
+  <AddPublishModal v-model:visible="publishModalVisibled" @v-on:onOk="addOk" />
+</page>
 </template>
 
-<script>
+<script lang="ts">
 import * as api from '../api'
-
+import AddPublishModal from './components/AddPublishModal.vue'
+import {
+  defineComponent
+} from 'vue'
+import {
+  Tabs
+} from 'ant-design-vue'
 const columns = [{
     title: '申请标题',
     dataIndex: 'title'
@@ -75,84 +73,110 @@ const columns = [{
   {
     title: '完成时间',
     key: 'action',
+  },
+  {
+    title: '应用名称',
+    // key: 'action'
+  },
+  {
+    title: '分支名称',
+    // key: 'action',
+  },
+  {
+    title: '发布类型',
+    // key: 'action',
+  },
+  {
+    title: '发布状态',
+    dataIndex: 'status.status',
+  },
+  {
+    title: '操作',
+    // key: 'action',
     slots: {
       customRender: 'action'
     },
   },
-  {
-    title: '应用名称',
-    key: 'action'
-  },
-  {
-    title: '分支名称',
-    key: 'action',
-  },
-  {
-    title: '发布类型',
-    key: 'action',
-  },
-  {
-    title: '发布状态',
-    key: 'action',
-  },
-  {
-    title: '操作',
-    key: 'action',
-    // slots: {
-    //   customRender: 'action'
-    // },
-  },
 ];
 
-const data = [{
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-];
+interface FormProps {
+  envid: number | null
+  title: string
+}
 
-export default {
-  data() {
+interface DataProps {
+  visible: boolean
+  data: any[]
+  columns: any[]
+  form: FormProps
+  publishModalVisibled: boolean,
+    tabsCfgs: EnvProps[]
+}
+
+export default defineComponent({
+  data(): DataProps {
     return {
       visible: false,
-      data,
+      publishModalVisibled: false,
+      data: [],
       columns,
-      form: {}
+      form: {
+        title: '',
+        envid: null
+      },
+      tabsCfgs: []
+    }
+  },
+  components: {
+    ATabs: Tabs,
+    ATabPane: Tabs.TabPane,
+    AddPublishModal
+  },
+  watch: {
+    publishModalVisibled() {
+      console.log('publishModalVisibled change')
     }
   },
   created() {
-    this.fetchData()
+    this.fetchEnv().then((res) => {
+      this.form.envid = res[0].id
+      this.fetchData()
+    })
   },
   methods: {
     fetchData() {
-      api.fetchPublishList().then((res) => {
+      api.fetchPublishList(this.form).then((res) => {
         this.data = res
       })
+    },
+    fetchEnv() {
+      return api.fetchEnv().then((res) => {
+        this.tabsCfgs = res
+        return res
+      })
+    },
+    search() {
+      this.fetchData()
     },
     handleSubmit() {
       //
     },
     addPublish() {
-      this.visible = true
+      this.publishModalVisibled = true
+    },
+    goDetail(record: any) {
+      console.log(record, 'record')
+      this.$router.push('/publish/detail/222')
+    },
+    addOk() {
+      this.publishModalVisibled = false
+      this.fetchData()
+    },
+    onTabChange(key: any) {
+      console.log(key, 'key')
     }
   }
-}
+})
 </script>
 
 <style lang="stylus">

@@ -1,15 +1,19 @@
 import axios, { AxiosRequestConfig, AxiosPromise } from 'axios'
 import APP from '@/utils/app'
+import router from '@/router'
 
-function http (url: string, config?: AxiosRequestConfig): AxiosPromise<any> {
+function http <T> (url: string, config?: AxiosRequestConfig): Promise<T> {
   return axios(url,  config).then((res) => {
-    console.log(res)
     if (res.status === 200) {
       const data = res.data
-      if (data.code === 200) {
+      const code = data.code
+      if (code === 200) {
         return data.data
+      } else if (code === 401) {
+        console.log(router, 'router')
+        router.push('/logout')
       } else {
-        APP.$message.error(data.msg)
+        APP.$message.error(data.msg || data.result)
       }
     }
     return Promise.reject(res)
@@ -24,8 +28,8 @@ http.post = function (url: string, data?: any, config?: AxiosRequestConfig) {
   } )
 }
 
-http.get = function (url: string, data?: any, config?: AxiosRequestConfig) {
-  return http(url, {
+http.get = function <T = any>(url: string, data?: any, config?: AxiosRequestConfig) {
+  return http<T>(url, {
     method: 'GET',
     ...config,
     data: data

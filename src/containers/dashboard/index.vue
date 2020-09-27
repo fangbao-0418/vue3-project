@@ -1,7 +1,10 @@
 <template>
 <a-layout class="container">
   <a-layout-sider class="left" :collapsed="collapsed">
-    <div class="logo">XT OPS</div>
+    <div class="logo">
+      <img :src="require('@/assets/xt-logo.png')" />
+      <span>OPS</span>
+    </div>
     <Menu class="menu" :collapsed="collapsed" />
   </a-layout-sider>
   <a-layout>
@@ -18,10 +21,8 @@
         </span>
       </div>
     </a-layout-header>
-    <a-layout-content :style="{ margin: '24px 16px 0', overflow: 'initial' }">
-      <div :style="{ padding: '24px', background: '#fff', textAlign: 'center' }">
-        <router-view></router-view>
-      </div>
+    <a-layout-content>
+      <router-view></router-view>
     </a-layout-content>
     <a-layout-footer :style="{ textAlign: 'center' }">Ant Design ©2018 Created by Ant UED</a-layout-footer>
   </a-layout>
@@ -62,13 +63,28 @@ export default {
   flex-direction: column;
 
   .logo {
-    padding: 16px;
-    background: #373d41;
+    // padding: 16px;
+    background: #001529;
     color: #FFFFFF;
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
-    text-align: center;
+
+    // text-align: center;
+    margin-left: 20px;
+    overflow: hidden;
+    height: 64px;
+    line-height 64px;
+
+    img {
+      width: 40px;
+      height: 40px;
+    }
+
+    span {
+      margin-left: 10px;
+      line-height 64px;
+    }
   }
 
   .menu {

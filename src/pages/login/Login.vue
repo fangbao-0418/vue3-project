@@ -5,7 +5,7 @@
     <h2>欢迎来到 XT_OPS！</h2>
     <a-form class="form" :model="form" :label-col="labelCol" :wrapper-col="wrapperCol">
       <a-form-item>
-        <a-input v-model:value="form.username" type="password" placeholder="用户名">
+        <a-input v-model:value="form.username" placeholder="用户名">
           <template v-slot:prefix>
             <UserOutlined style="color:rgba(0,0,0,.25)" />
           </template>

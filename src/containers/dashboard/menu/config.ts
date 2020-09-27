@@ -1,16 +1,11 @@
 export const menuOptions = [
   {
-    path: '/decimal',
-    name: 'decimal',
-    icon: null
-  },
-  {
     path: '/publish',
     name: '发布管理',
-    icon: null,
+    icon: 'DeploymentUnitOutlined',
     children: [
       {
-        path: '/publish/list',
+        path: '/publish',
         name: '上线单管理'
       }
     ]
