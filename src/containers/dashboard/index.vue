@@ -13,7 +13,7 @@
       <menu-fold-outlined v-else class="trigger" @click="() => (collapsed = !collapsed)" />
       <div class="top_right">
         <span>
-          方宝
+          {{shareData.userInfo.first_name}}
         </span>
         |
         <span @click="logout">
@@ -31,15 +31,24 @@
 
 <script>
 import Menu from "./menu";
+import shareData from '@/store/shareData'
+import {
+  fetchUserInfo
+} from '@/api'
 export default {
   data() {
     return {
       collapsed: false,
-      selectedKeys: ["4"],
+      shareData: shareData.state
     };
   },
   components: {
     Menu,
+  },
+  created() {
+    fetchUserInfo().then((res) => {
+      shareData.setUserInfo(res)
+    })
   },
   methods: {
     logout() {

@@ -8,7 +8,7 @@ function http <T> (url: string, config?: AxiosRequestConfig): Promise<T> {
       const data = res.data
       const code = data.code
       if (code === 200) {
-        return data.data
+        return data.data || data.result
       } else if (code === 401) {
         console.log(router, 'router')
         router.push('/logout')
@@ -20,8 +20,8 @@ function http <T> (url: string, config?: AxiosRequestConfig): Promise<T> {
   })
 }
 
-http.post = function (url: string, data?: any, config?: AxiosRequestConfig) {
-  return http(url, {
+http.post = function <T = any>(url: string, data?: any, config?: AxiosRequestConfig) {
+  return http<T>(url, {
     method: 'POST',
     ...config,
     data: data

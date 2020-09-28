@@ -8,6 +8,8 @@ import Logout from '../pages/logout'
 import PublishList from '@/pages/publish/list'
 import PublishDetail from '@/pages/publish/detail'
 
+import UserList from '@/pages/user/list'
+
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -17,6 +19,11 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/decimal',
         component: DecimalPage
+      },
+      {
+        name: 'userList',
+        path: '/user/list',
+        component: UserList
       },
       {
         name: 'publishList',

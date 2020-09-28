@@ -6,7 +6,7 @@
   </a-tabs>
   <a-form layout="inline" :model="form" @submit="handleSubmit" @submit.prevent>
     <a-form-item label="应用名称">
-      <a-input v-model:value="form.user" placeholder="应用名称">
+      <a-input v-model:value="form.titleorgroup" placeholder="应用名称">
         <template v-slot:prefix>
           <UserOutlined style="color:rgba(0,0,0,.25)" />
         </template>
@@ -100,8 +100,8 @@ const columns = [{
 ];
 
 interface FormProps {
-  envid: number | null
-  title: string
+  applierid ? : string
+  titleorgroup ? : string
 }
 
 interface DataProps {
@@ -121,8 +121,8 @@ export default defineComponent({
       data: [],
       columns,
       form: {
-        title: '',
-        envid: null
+        // titleorgroup: '',
+        // applierid: ''
       },
       tabsCfgs: []
     }
@@ -138,8 +138,8 @@ export default defineComponent({
     }
   },
   created() {
-    this.fetchEnv().then((res) => {
-      this.form.envid = res[0].id
+    this.fetchEnv().then(() => {
+      // this.form.envid = res[0].id
       this.fetchData()
     })
   },
@@ -165,8 +165,7 @@ export default defineComponent({
       this.publishModalVisibled = true
     },
     goDetail(record: any) {
-      console.log(record, 'record')
-      this.$router.push('/publish/detail/222')
+      this.$router.push(`/publish/detail/${record.traceid}`)
     },
     addOk() {
       this.publishModalVisibled = false

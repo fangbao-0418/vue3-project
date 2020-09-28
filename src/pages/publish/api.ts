@@ -3,32 +3,32 @@ import { DeployHistoryListProps } from './interface'
 
 /** 获取发布列表 */
 export function fetchPublishList (data: any) {
-    return http.get<DeployHistoryListProps[]>('/api/deploy/history/', data).then((res) => {
-        return (res || []).map((item) => {
-            let status = {
-                id: 0,
-                status: '待审核'
-            }
-            if (item.domains?.length) {
-                if (item.domains.every((v) => v.status.status === '发布成功')) {
-                    status = {
-                        id: 4,
-                        status: '发布成功'
-                    }
-                } else if (item.domains.every((v) => v.status.status === '待发布')) {
-                    status = {
-                        id: 2,
-                        status: '待发布'
-                    }
-                }
-            }
-            
-            return {
-                ...item,
-                status
-            }
-        })
+  return http.post<DeployHistoryListProps[]>('/api/deploy/history/', data).then((res) => {
+    return (res || []).map((item) => {
+      let status = {
+          id: 0,
+          status: '待审核'
+      }
+      if (item.domains?.length) {
+          if (item.domains.every((v) => v.status.status === '发布成功')) {
+              status = {
+                  id: 4,
+                  status: '发布成功'
+              }
+          } else if (item.domains.every((v) => v.status.status === '待发布')) {
+              status = {
+                  id: 2,
+                  status: '待发布'
+              }
+          }
+      }
+      
+      return {
+          ...item,
+          status
+      }
     })
+  })
 }
 
 /** 获取应用列表 */
@@ -48,20 +48,30 @@ export function submitPublish (data: {
     title: string
     domains: {appid: number, branchid: number}[]
 }) {
-    return http.post('/api/deploy/request/', data)
+  return http.post('/api/deploy/request/', data)
 }
 
 export function fetchEnv () {
-    return http.get<EnvProps[]>('/api/deploy/env/')
+  return http.get<EnvProps[]>('/api/deploy/env/')
 }
 
 /** 执行发布 */
-export function execDeploy (paylod: {
-  traceid: number
+export function execDeploy (payload: {
+  traceid: string
   /** 0: 执行发布 1：中断后继续发布 */
-  skip: 0 | 1
+  skip?: 0 | 1
 }) {
-  return http.post('/api/deploy/pipelineonline/{traceid}/', {
-    skip: 0
+  return http.post(`/api/deploy/pipelineonline/${payload.traceid}/`, {
+    skip: 1
   })
+}
+
+/** 查询发布详情 */
+export function fetchPublishDetail (traceid: string) {
+  return http.get<DeployHistoryListProps>(`/api/deploy/historydetail/${traceid}/`)
+}
+
+/** 中止所有发布 */
+export function stopAllPublish (traceid: string) {
+  return http.get<DeployHistoryListProps>(`/api/deploy/pipelineonline/${traceid}/`)
 }

@@ -12,7 +12,8 @@ import {
   Modal,
   Select,
   Breadcrumb,
-  Card
+  Card,
+  Badge
 } from 'ant-design-vue'
 import { UserOutlined, LockOutlined, DeploymentUnitOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
  
@@ -23,6 +24,7 @@ export default function (app: App) {
   app.component(UserOutlined.name, UserOutlined)
   app.component(LockOutlined.name, LockOutlined)
   app.component(Card.name, Card)
+  app.component(Badge.name, Badge)
   app.component(Breadcrumb.name, Breadcrumb)
   app.component(Breadcrumb.Item.name, Breadcrumb.Item)
   app.component(Select.name, Select)
