@@ -1,11 +1,11 @@
 <template>
 <div class="select-branch">
-  <a-select allowClear class="mr8" placeholder="app" show-search :filter-option="filterAppOption" @change="onAppChange">
+  <a-select v-model:value="value.appid" allowClear class="mr8" placeholder="app" show-search :filter-option="filterAppOption" @change="onAppChange">
     <a-select-option :label="item.name" :key="item.id" v-for="(item) in apps" :value="item.id">
       {{ item.name }}
     </a-select-option>
   </a-select>
-  <a-select placeholder="branch" show-search :filter-option="filterBranchOption" @change="onBranchChange">
+  <a-select @focus="branchFocus" v-model:value="value.branchid" placeholder="branch" show-search :filter-option="filterBranchOption" @change="onBranchChange">
     <a-select-option :label="item.name" :key="index" v-for="(item, index) in branchs" :value="item.id">
       {{ item.name }}
     </a-select-option>
@@ -55,6 +55,9 @@ export default defineComponent({
       this.apps = res
     })
   },
+  mounted() {
+    console.log(this.value, 'updated')
+  },
   methods: {
     filterAppOption(input: string, option: any) {
       return option.props.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
@@ -66,6 +69,10 @@ export default defineComponent({
       this.value.appid = id
       api.fetchBranchList(id).then((res) => {
         this.branchs = res
+        this.$emit('update:modelValue', {
+          ...this.modelValue,
+          ...this.value
+        })
       })
     },
     onBranchChange(id: any) {
@@ -74,6 +81,10 @@ export default defineComponent({
         ...this.modelValue,
         ...this.value
       })
+    },
+    branchFocus() {
+      this.onAppChange(this.value.appid)
+      console.log('branchClick')
     }
   }
 })

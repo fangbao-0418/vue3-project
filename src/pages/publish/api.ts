@@ -1,10 +1,17 @@
 import http from '@/utils/http'
 import { DeployHistoryListProps } from './interface'
 
+interface PageRecord<T> {
+  page: number
+  pageSize: number
+  total: number
+  records: T[]
+}
+
 /** 获取发布列表 */
 export function fetchPublishList (data: any) {
-  return http.get<DeployHistoryListProps[]>('/api/deploy/history/', data).then((res) => {
-    return (res || []).map((item) => {
+  return http.get<PageRecord<DeployHistoryListProps>>('/api/deploy/history/', data).then((res) => {
+    res.records = (res.records || []).map((item) => {
       let status = {
           id: 0,
           status: '待审核'
@@ -24,10 +31,11 @@ export function fetchPublishList (data: any) {
       }
       
       return {
-          ...item,
-          status
+        ...item,
+        status
       }
     })
+    return res
   })
 }
 
@@ -74,4 +82,38 @@ export function fetchPublishDetail (traceid: string) {
 /** 中止所有发布 */
 export function stopAllPublish (traceid: string) {
   return http.get<DeployHistoryListProps>(`/api/deploy/pipelineonline/${traceid}/`)
+}
+
+/** 获取发布组 */
+export function fetchDeployGroup () {
+  return http.get<any>(`/api/deploy/group/`)
+}
+
+/** 创建发布组 */
+export function addDeployGroup (data: {
+  name: string
+}) {
+  return http.post<number>(`/api/deploy/group/`, data)
+}
+
+/** 添加发布组下应用 */
+export function addDeployGroupApp (data: {
+  groupId: any
+  appIds: any[]
+}) {
+  return http.post<number>(`/api/deploy/getappundergroup/${data.groupId}/`, {appid: data.appIds})
+}
+
+/** 获取发布组下应用 */
+export function fetchDeployGroupApp (groupid: any) {
+  return http.get<{id: any, name: string}[]>(`/api/deploy/getappundergroup/${groupid}/`)
+}
+
+/** 日常/测试/预发发布 */
+export function deployOfflineApp (data: {
+  title: string
+  envid: any
+  domains: {appid: number, branchid: any[]}[]
+}) {
+  return http.post(`/api/deploy/pipelineoffline/`, data)
 }

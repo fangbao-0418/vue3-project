@@ -3,10 +3,11 @@ const store = {
   debug: true,
 
   state: reactive({
-    userInfo: {}
+    userInfo: {
+    } as any
   }),
 
-  setUserInfo(newValue: Object) {
+  setUserInfo(newValue: any) {
     this.state.userInfo = newValue
   },
 

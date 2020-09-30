@@ -15,9 +15,16 @@ import {
   Card,
   Badge,
   Switch,
-  Space
+  Space,
+  Checkbox,
+  Row,
+  Col,
+  Popconfirm,
+  Radio
 } from 'ant-design-vue'
 import { UserOutlined, LockOutlined, DeploymentUnitOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue';
+
+console.log(Popconfirm, 'Popconfirm')
 
 export default function (app: App) {
   app.component(DeploymentUnitOutlined.name, DeploymentUnitOutlined)
@@ -25,6 +32,14 @@ export default function (app: App) {
   app.component(MenuFoldOutlined.name, MenuFoldOutlined)
   app.component(UserOutlined.name, UserOutlined)
   app.component(LockOutlined.name, LockOutlined)
+  app.component(Radio.name, Radio)
+  app.component(Radio.Button.name, Radio.Button)
+  app.component(Radio.Group.name, Radio.Group)
+  app.component(Popconfirm.name, Popconfirm)
+  app.component(Row.name, Row)
+  app.component(Col.name, Col)
+  app.component(Checkbox.name, Checkbox)
+  app.component(Checkbox.Group.name, Checkbox.Group)
   app.component('ASpace', Space)
   app.component(Switch.name, Switch)
   app.component(Card.name, Card)

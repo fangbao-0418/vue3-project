@@ -20,7 +20,11 @@ export const menuOptions = [
     icon: 'DeploymentUnitOutlined',
     children: [
       {
-        path: '/publish',
+        path: '/publish/deploy',
+        name: '服务部署'
+      },
+      {
+        path: '/publish/apply',
         name: '上线单管理'
       }
     ]

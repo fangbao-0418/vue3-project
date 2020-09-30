@@ -5,6 +5,7 @@ import Dashboard from '../containers/dashboard/index.vue'
 import Login from '../pages/login'
 import Logout from '../pages/logout'
 
+import { Deploy } from '@/pages/publish/deploy'
 import PublishList from '@/pages/publish/list'
 import PublishDetail from '@/pages/publish/detail'
 
@@ -32,8 +33,13 @@ const routes: RouteRecordRaw[] = [
         component: RoleList
       },
       {
+        name: 'publishDeploy',
+        path: '/publish/deploy',
+        component: Deploy
+      },
+      {
         name: 'publishList',
-        path: '/publish',
+        path: '/publish/apply',
         component: PublishList
       },
       {

@@ -8,9 +8,8 @@ function http <T> (url: string, config?: AxiosRequestConfig): Promise<T> {
       const data = res.data
       const code = data.code
       if (code === 200) {
-        return data.data || data.result
+        return data.data || data.result || data.msg
       } else if (code === 401) {
-        console.log(router, 'router')
         router.push('/logout')
       } else {
         APP.$message.error(data.msg || data.result)
@@ -18,6 +17,14 @@ function http <T> (url: string, config?: AxiosRequestConfig): Promise<T> {
     }
     return Promise.reject(res)
   })
+}
+
+http.put = function <T = any>(url: string, data?: any, config?: AxiosRequestConfig) {
+  return http<T>(url, {
+    method: 'PUT',
+    ...config,
+    data: data
+  } )
 }
 
 http.post = function <T = any>(url: string, data?: any, config?: AxiosRequestConfig) {
@@ -31,6 +38,14 @@ http.post = function <T = any>(url: string, data?: any, config?: AxiosRequestCon
 http.get = function <T = any>(url: string, data?: any, config?: AxiosRequestConfig) {
   return http<T>(url, {
     method: 'GET',
+    ...config,
+    data: data
+  } )
+}
+
+http.delete = function <T = any>(url: string, data?: any, config?: AxiosRequestConfig) {
+  return http<T>(url, {
+    method: 'DELETE',
     ...config,
     data: data
   } )

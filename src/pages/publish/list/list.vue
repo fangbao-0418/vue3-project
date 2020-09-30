@@ -146,7 +146,7 @@ export default defineComponent({
   methods: {
     fetchData() {
       api.fetchPublishList(this.form).then((res) => {
-        this.data = res
+        this.data = res.records
       })
     },
     fetchEnv() {
