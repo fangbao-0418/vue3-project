@@ -106,7 +106,7 @@ const columns = [
 interface FormProps {
   applierid?: string;
   titleorgroup?: string;
-  envid?: string;
+  envid?: any;
 }
 
 interface DataProps {
