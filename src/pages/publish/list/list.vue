@@ -1,9 +1,9 @@
 <template>
 <page :breadcrumb="[{name: '上线单管理', path: '/publish/list'}]">
-  <a-tabs type="card" v-model:activeKey="form.envid" @change="onTabChange">
+  <!-- <a-tabs type="card" v-model:activeKey="form.envid" @change="onTabChange">
     <a-tab-pane v-for="(item) in tabsCfgs" :key="item.id" :tab="item.name">
     </a-tab-pane>
-  </a-tabs>
+  </a-tabs> -->
   <a-form layout="inline" :model="form" @submit="handleSubmit" @submit.prevent>
     <a-form-item label="应用名称">
       <a-input v-model:value="form.titleorgroup" placeholder="应用名称">
@@ -43,9 +43,9 @@ import AddPublishModal from './components/AddPublishModal.vue'
 import {
   defineComponent
 } from 'vue'
-import {
-  Tabs
-} from 'ant-design-vue'
+// import {
+//   Tabs
+// } from 'ant-design-vue'
 const columns = [{
     title: '申请标题',
     dataIndex: 'title'
@@ -128,8 +128,8 @@ export default defineComponent({
     }
   },
   components: {
-    ATabs: Tabs,
-    ATabPane: Tabs.TabPane,
+    // ATabs: Tabs,
+    // ATabPane: Tabs.TabPane,
     AddPublishModal
   },
   watch: {
@@ -145,7 +145,7 @@ export default defineComponent({
   },
   methods: {
     fetchData() {
-      api.fetchPublishList(this.form).then((res) => {
+      api.fetchPublishList({...this.form, envid: 4}).then((res) => {
         this.data = res.records
       })
     },

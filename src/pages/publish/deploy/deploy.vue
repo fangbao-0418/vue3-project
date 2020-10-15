@@ -118,7 +118,8 @@ export default defineComponent({
     },
     fetchEnvs() {
       api.fetchEnv().then((res) => {
-        this.envs = res
+        this.form.env = res[0].id
+        this.envs = res.filter((item) => item.id !== 4)
       })
     },
     fetchDeployGroup() {
@@ -142,7 +143,6 @@ export default defineComponent({
     deploy() {
       console.log(this.form)
       if (this.groupId) {
-
         api.addDeployGroupApp({
           groupId: this.groupId,
           appIds: this.form.domains.map((item) => item.appid)
@@ -153,12 +153,12 @@ export default defineComponent({
             branchid: [item.branchid]
           }
         })
-        console.log(this.form, 'form')
-        console.log(domains, 'xxx')
         api.deployOfflineApp({
           title: '',
           envid: this.form.env,
           domains
+        }).then(() => {
+          this.$router.push('/publish/deploy')
         })
         return
       }

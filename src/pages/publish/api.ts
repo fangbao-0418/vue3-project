@@ -9,7 +9,21 @@ interface PageRecord<T> {
 }
 
 /** 获取发布列表 */
+// envid?: string
+// pagenum?: number
+// pagesize?: number
+// /** 发布标题 */
+// titleorgroup: string
+// /** 申请人id */
+// applierid?: string
+// /** 审批人id */
+// approverid?: string
 export function fetchPublishList (data: any) {
+  data.page = 1
+  data.pageSize = 10
+  // data.titleorgroup = ''
+  // data.applierid = 1
+  // data.approverid = 1
   return http.get<PageRecord<DeployHistoryListProps>>('/api/deploy/history/', data).then((res) => {
     res.records = (res.records || []).map((item) => {
       let status = {

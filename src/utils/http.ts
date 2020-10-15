@@ -39,7 +39,7 @@ http.get = function <T = any>(url: string, data?: any, config?: AxiosRequestConf
   return http<T>(url, {
     method: 'GET',
     ...config,
-    data: data
+    params: data
   } )
 }
 
