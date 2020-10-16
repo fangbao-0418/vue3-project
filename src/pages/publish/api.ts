@@ -94,8 +94,8 @@ export function fetchPublishDetail (traceid: string) {
 }
 
 /** 中止所有发布 */
-export function stopAllPublish (traceid: string) {
-  return http.get<DeployHistoryListProps>(`/api/deploy/pipelineonline/${traceid}/`)
+export function stopAllDeploy (traceid: string) {
+  return http.delete(`/api/deploy/pipelineonline/${traceid}/`)
 }
 
 /** 获取发布组 */
@@ -131,3 +131,24 @@ export function deployOfflineApp (data: {
 }) {
   return http.post(`/api/deploy/pipelineoffline/`, data)
 }
+
+/** 单应用发布停止/重置/回滚 */
+export const deployOperate = (data: {
+  traceid: any
+  action: 'stop' | 'reset' | 'rollback'
+  appid: any
+}) => {
+  return http.post(`/api/deploy/modify_singleapp_status/${data.traceid}/`, {
+    action: data.action,
+    appid: data.appid
+  })
+}
+
+/** 获取构建日志 */
+export const deployLog = (params: {
+  traceid: any
+  appid: any
+}) => {
+  return http.get(`/api/deploy/joblog/`, params)
+}
+

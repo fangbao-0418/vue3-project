@@ -4,10 +4,7 @@
     <a-button type="primary" class="mr8" @click="execDeploy">
       执行发布
     </a-button>
-    <a-button type="warning" class="mr8">
-      暂停发布
-    </a-button>
-    <a-button type="danger" class="mr8">
+    <a-button type="danger" class="mr8" @click="stopAllDeploy">
       中止发布
     </a-button>
     <a-button type="warning">
@@ -15,12 +12,16 @@
     </a-button>
   </a-card>
   <a-card class='mt8' title='应用信息'>
-    <a-table :columns="columns" :data-source="data">
+    <a-table :expandIcon="() => null" :rowKey="(r) => r.app.id" :expandedRowKeys="expandedRowKeys" :pagination="false" :columns="columns" :data-source="data">
       <template #status="{text}">
         <a-badge color="lime" :text="text.status " />
       </template>
-      <template #action="">
-        <span class="href">详情</span>
+      <template #action="{text}">
+        <a-space>
+          <span class="href" @click="build(text)">构建</span>
+          <span v-if="text.status.code === 1004" class="href" @click="stopBuild(text)">中止</span>
+          <span class="href" @click="showDetail(text)">日志</span>
+        </a-space>
       </template>
       <template #expandedRowRender="text">
         <Logs class="logs" :logs="text.record.logs" :code="text.record.status.code" />
@@ -43,11 +44,12 @@ import {
 } from '../interface'
 import * as api from '../api'
 import Logs from './components/Logs.vue'
+import { ColumnProps } from 'ant-design-vue/types/table/column'
 import {
   DeployCode
 } from './enum'
 
-const columns = [{
+const columns: ColumnProps<any>[] = [{
   title: '应用',
   dataIndex: 'app.name'
 }, {
@@ -66,13 +68,8 @@ const columns = [{
     customRender: 'status'
   }
 }, {
-  title: '申请人',
-  dataIndex: 'applier.first_name'
-}, {
-  title: '审批人',
-  dataIndex: 'approver.first_name'
-}, {
   title: '操作',
+  align: 'center',
   slots: {
     customRender: 'action'
   }
@@ -83,7 +80,7 @@ interface DataProps {
   id: string
   data: DomainProps[]
   expandedRowKeys: any[]
-  message: string
+  envid?: any
 }
 
 export default defineComponent({
@@ -95,8 +92,7 @@ export default defineComponent({
       columns,
       id: this.$route.params.id as string,
       data: [],
-      expandedRowKeys: [],
-      message: ''
+      expandedRowKeys: []
     }
   },
   created() {
@@ -108,6 +104,7 @@ export default defineComponent({
   methods: {
     fetchData() {
       api.fetchPublishDetail(this.id).then((res) => {
+        this.envid = res.env?.id
         this.data = res.domains
       })
     },
@@ -133,7 +130,6 @@ export default defineComponent({
       }
       Socket.onmessage = (data) => {
         const result = JSON.parse(data.data)
-        this.message = result.result
         this.data = this.data.map((item) => {
           if (item.app.id === result.appid) {
             item.logs = result.msg
@@ -143,6 +139,46 @@ export default defineComponent({
           return item
         })
       }
+    },
+    onExpand(expanded: boolean, record: any) {
+      if (expanded) {
+        api.deployLog({
+          traceid: this.id,
+          appid: record.app.id
+        }).then((res) => {
+          record.logs = res
+        })
+      }
+    },
+    stopAllDeploy () {
+      api.stopAllDeploy(this.id)
+    },
+    showDetail(record: DomainProps) {
+      api.deployLog({
+        traceid: this.id,
+        appid: record.app.id
+      }).then((res) => {
+        record.logs = res
+      })
+      this.expandedRowKeys = [record.app.id]
+      // console.log(record.app.id, 'xxxx')
+    },
+    stopBuild(record: DomainProps){
+      api.deployOperate({
+        traceid: this.id,
+        appid: record.app.id,
+        action: 'stop'
+      })
+    },
+    build(record: DomainProps) {
+      api.deployOfflineApp({
+        title: '',
+        envid: this.envid,
+        domains: [{
+          appid: record.app.id,
+          branchid: record.branch.map((item) => item.id)
+        }]
+      })
     }
   }
 })

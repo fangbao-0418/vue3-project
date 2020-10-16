@@ -1,4 +1,3 @@
-
 /**
  *  1000: "应用存在",
     1001: "应用不存在",
@@ -24,10 +23,14 @@ export interface DomainProps {
     status: string
     code: DeployCode
   }
+  branch: { id: any, name: string }[]
   logs: string
 }
 
 export interface DeployHistoryListProps {
+  env: {
+    id: any
+  }
   domains: DomainProps[]
   status: {
     id: number,

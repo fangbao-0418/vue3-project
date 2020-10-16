@@ -38,7 +38,12 @@
       <a-button type="primary" @click="addPublish">应用发布</a-button>
     </div>
     <a-table :columns="columns" :data-source="data">
-      <template v-slot:action="{ text }">
+      <template #domains="{ text }">
+        <div v-for="(item, index) in text" :key="index">
+          {{ item.app.name }}
+        </div>
+      </template>
+      <template #action="{ text }">
         <span class="href" @click="goDetail(text)">详情</span>
       </template>
     </a-table>
@@ -46,9 +51,11 @@
 </template>
 
 <script lang="ts">
+// import { ColumnProps } from 'ant-design-vue/types/table/column';
 import * as api from "../api";
 import { defineComponent } from "vue";
 import { Tabs } from "ant-design-vue";
+
 const columns = [
   {
     title: "申请标题",
@@ -58,18 +65,18 @@ const columns = [
     title: "环境",
     dataIndex: "env.name",
   },
-  {
-    title: "申请人",
-    dataIndex: "applier.first_name",
-  },
-  {
-    title: "审批人",
-    dataIndex: "approver.first_name",
-  },
-  {
-    title: "审批意见",
-    dataIndex: "comments",
-  },
+  // {
+  //   title: "申请人",
+  //   dataIndex: "applier.first_name",
+  // },
+  // {
+  //   title: "审批人",
+  //   dataIndex: "approver.first_name",
+  // },
+  // {
+  //   title: "审批意见",
+  //   dataIndex: "comments",
+  // },
   {
     title: "创建时间",
     dataIndex: "created_time",
@@ -80,12 +87,15 @@ const columns = [
   },
   {
     title: "应用名称",
-    // key: 'action'
+    dataIndex: 'domains',
+    slots: {
+      customRender: "domains",
+    }
   },
-  {
-    title: "分支名称",
-    // key: 'action',
-  },
+  // {
+  //   title: "分支名称",
+  //   // key: 'action',
+  // },
   {
     title: "发布类型",
     // key: 'action',
