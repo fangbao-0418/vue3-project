@@ -12,6 +12,8 @@ import PublishDetail from '@/pages/publish/detail'
 import UserList from '@/pages/user/list'
 import { RoleList } from '@/pages/user/role'
 
+import { ApplicationList } from '@/pages/application'
+
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -51,6 +53,11 @@ const routes: RouteRecordRaw[] = [
         name: 'publishDetail',
         path: '/publish/detail/:id',
         component: PublishDetail
+      },
+      {
+        name: 'applicationList',
+        path: '/app/list',
+        component: ApplicationList
       }
     ]
   },
